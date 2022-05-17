@@ -42,7 +42,7 @@ async fn main() -> Result<()> {
 
     // ERROR: this is the error our agents keep encountering
     if receipt.is_none() {
-        bail!("Could not find tx {} in mempool", tx_hash)
+        bail!("Could not find tx {:#x} in mempool", tx_hash)
     }
         
     println!(
