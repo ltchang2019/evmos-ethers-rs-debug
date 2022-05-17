@@ -35,12 +35,15 @@ async fn main() -> Result<()> {
     // Dispatch tx
     println!("Dispatching tx...");
     let dispatched = signing_provider.send_transaction(tx, None).await.unwrap();
+    let tx_hash: ethers::core::types::H256 = *dispatched;
 
     // Await tx dispatched to mempool
-    let tx_hash: ethers::core::types::H256 = *dispatched;
+    println!("Awaiting dispatched tx {:#x}...", tx_hash);
     let receipt = dispatched.await?;
 
-    // ERROR: this is the error our agents keep encountering
+    // ERROR: This is the error our agents keep encountering. Tx receipt will 
+    // not be in mempool, suggesting dropped tx. Eventually, a tx will go 
+    // through from the signer address but it will be with a different tx hash.
     if receipt.is_none() {
         bail!("Could not find tx {:#x} in mempool", tx_hash)
     }
